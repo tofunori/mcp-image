@@ -5,6 +5,7 @@
 
 import { beforeEach, describe, expect, it } from 'vitest'
 import type { GeneratedImageResult } from '../../api/geminiClient'
+import type { QaReport } from '../../types/qa'
 import {
   FileOperationError,
   GeminiAPIError,
@@ -26,7 +27,7 @@ describe('ResponseBuilder', () => {
       const generationResult: GeneratedImageResult = {
         imageData: testImageData,
         metadata: {
-          model: 'gemini-3-pro-image-preview-preview',
+          model: 'gemini-3.1-flash-image-preview',
           prompt: 'test prompt',
           mimeType: 'image/png',
           timestamp: new Date('2025-08-28T12:00:00Z'),
@@ -59,7 +60,7 @@ describe('ResponseBuilder', () => {
       const generationResult: GeneratedImageResult = {
         imageData: testImageData,
         metadata: {
-          model: 'gemini-3-pro-image-preview-preview',
+          model: 'gemini-3.1-flash-image-preview',
           prompt: 'test prompt',
           mimeType: 'image/png',
           timestamp: new Date('2025-08-28T12:00:00Z'),
@@ -84,6 +85,71 @@ describe('ResponseBuilder', () => {
       contentData = JSON.parse(response.content[0].text)
       expect(contentData.resource.mimeType).toBe('image/png')
       expect(contentData.resource.uri).toBe('file:///path/to/image.unknown')
+    })
+
+    it('should include QA report in metadata when provided', () => {
+      const testImageData = Buffer.from('fake-image-data')
+      const generationResult: GeneratedImageResult = {
+        imageData: testImageData,
+        metadata: {
+          model: 'gemini-3.1-flash-image-preview',
+          prompt: 'test prompt',
+          mimeType: 'image/png',
+          timestamp: new Date('2025-08-28T12:00:00Z'),
+          inputImageProvided: false,
+        },
+      }
+
+      const qaReport: QaReport = {
+        passed: true,
+        score: 0.95,
+        hardFailCount: 0,
+        checks: [
+          {
+            id: 'spelling',
+            name: 'Spelling',
+            severity: 'hard',
+            status: 'pass',
+            detail: 'No errors found',
+          },
+        ],
+        attempts: 1,
+        figureStyle: 'scientific_map',
+        evaluationTimeMs: 2500,
+      }
+
+      const response = responseBuilder.buildSuccessResponse(
+        generationResult,
+        '/path/to/image.png',
+        { qaReport }
+      )
+
+      const contentData = JSON.parse(response.content[0].text)
+      expect(contentData.metadata.qa).toBeDefined()
+      expect(contentData.metadata.qa.passed).toBe(true)
+      expect(contentData.metadata.qa.score).toBe(0.95)
+      expect(contentData.metadata.qa.checks).toHaveLength(1)
+      expect(contentData.metadata.figureStyle).toBe('scientific_map')
+    })
+
+    it('should not include QA metadata when no options provided', () => {
+      const testImageData = Buffer.from('fake-image-data')
+      const generationResult: GeneratedImageResult = {
+        imageData: testImageData,
+        metadata: {
+          model: 'gemini-3.1-flash-image-preview',
+          prompt: 'test prompt',
+          mimeType: 'image/png',
+          timestamp: new Date('2025-08-28T12:00:00Z'),
+          inputImageProvided: false,
+        },
+      }
+
+      const response = responseBuilder.buildSuccessResponse(generationResult, '/path/to/image.png')
+
+      const contentData = JSON.parse(response.content[0].text)
+      expect(contentData.metadata.qa).toBeUndefined()
+      expect(contentData.metadata.figureStyle).toBeUndefined()
     })
   })
 

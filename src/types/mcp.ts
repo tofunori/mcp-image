@@ -3,6 +3,8 @@
  * Defines types related to @modelcontextprotocol/sdk and project-specific types
  */
 
+import type { QaReport } from './qa'
+
 /**
  * Context method type for image generation metadata
  */
@@ -12,12 +14,16 @@
  */
 export type AspectRatio =
   | '1:1' // Square (default)
+  | '1:4' // Ultra-tall (cross-sections, vertical timelines)
+  | '1:8' // Extreme vertical strip
   | '2:3' // Portrait
   | '3:2' // Landscape
   | '3:4' // Portrait
+  | '4:1' // Ultra-wide strip (timelines, stratigraphic columns)
   | '4:3' // Landscape
   | '4:5' // Portrait
   | '5:4' // Landscape
+  | '8:1' // Extreme horizontal strip (panoramic cross-sections)
   | '9:16' // Vertical (social media)
   | '16:9' // Horizontal (cinematic)
   | '21:9' // Ultra-wide
@@ -25,16 +31,16 @@ export type AspectRatio =
 /**
  * Supported image sizes for high-resolution output
  */
-export type ImageSize = '2K' | '4K'
+export type ImageSize = '0.5K' | '1K' | '2K' | '4K'
 
 /**
  * Scientific figure styles for publication-ready illustrations
  * Optimized for environmental sciences, glaciology, and remote sensing
  */
 export type FigureStyle =
-  | 'scientific_diagram'  // Schémas, processus, concepts scientifiques
-  | 'scientific_map'      // Cartes avec éléments standards (échelle, nord, légende)
-  | 'scientific_chart'    // Graphiques, visualisations de données
+  | 'scientific_diagram' // Schémas, processus, concepts scientifiques
+  | 'scientific_map' // Cartes avec éléments standards (échelle, nord, légende)
+  | 'scientific_chart' // Graphiques, visualisations de données
 
 /**
  * Edit mode for image modification
@@ -119,5 +125,9 @@ export interface StructuredContent {
     processingTime: number
     contextMethod: string
     timestamp: string
+    /** QA validation report (only present when figureStyle is set and QA is enabled) */
+    qa?: QaReport | undefined
+    /** Scientific figure style used for generation */
+    figureStyle?: string | undefined
   }
 }

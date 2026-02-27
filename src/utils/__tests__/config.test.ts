@@ -160,5 +160,65 @@ describe('config', () => {
         expect(result.error.message).toContain('at least 10 characters')
       }
     })
+
+    it('should enable scientific QA by default', () => {
+      // Arrange
+      process.env.GEMINI_API_KEY = 'test-api-key-12345'
+
+      // Act
+      const result = getConfig()
+
+      // Assert
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.enableScientificQa).toBe(true)
+        expect(result.data.scientificQaMaxRetries).toBe(1)
+      }
+    })
+
+    it('should disable scientific QA when SCIENTIFIC_QA_ENABLED is false', () => {
+      // Arrange
+      process.env.GEMINI_API_KEY = 'test-api-key-12345'
+      process.env.SCIENTIFIC_QA_ENABLED = 'false'
+
+      // Act
+      const result = getConfig()
+
+      // Assert
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.enableScientificQa).toBe(false)
+      }
+    })
+
+    it('should use custom SCIENTIFIC_QA_MAX_RETRIES value', () => {
+      // Arrange
+      process.env.GEMINI_API_KEY = 'test-api-key-12345'
+      process.env.SCIENTIFIC_QA_MAX_RETRIES = '3'
+
+      // Act
+      const result = getConfig()
+
+      // Assert
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.scientificQaMaxRetries).toBe(3)
+      }
+    })
+
+    it('should default to 1 retry when SCIENTIFIC_QA_MAX_RETRIES is invalid', () => {
+      // Arrange
+      process.env.GEMINI_API_KEY = 'test-api-key-12345'
+      process.env.SCIENTIFIC_QA_MAX_RETRIES = 'not-a-number'
+
+      // Act
+      const result = getConfig()
+
+      // Assert
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.scientificQaMaxRetries).toBe(1)
+      }
+    })
   })
 })

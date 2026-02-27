@@ -173,15 +173,12 @@ export class StructuredPromptGeneratorImpl implements StructuredPromptGenerator 
       const completePrompt = this.buildCompletePrompt(userPrompt, features, !!inputImageData)
 
       // Build system instruction based on mode
-      let systemInstruction = features.figureStyle
-        ? SCIENTIFIC_FIGURE_PROMPT
-        : SYSTEM_PROMPT
+      let systemInstruction = features.figureStyle ? SCIENTIFIC_FIGURE_PROMPT : SYSTEM_PROMPT
 
       // Add editing context if input image is provided
       if (inputImageData) {
-        systemInstruction += features.editMode === 'strict'
-          ? STRICT_EDITING_CONTEXT
-          : IMAGE_EDITING_CONTEXT
+        systemInstruction +=
+          features.editMode === 'strict' ? STRICT_EDITING_CONTEXT : IMAGE_EDITING_CONTEXT
       }
 
       // Generate structured prompt using Gemini 2.0 Flash via pure API call
@@ -270,7 +267,8 @@ Now transform the user's request with similar attention to detail and creative e
   ): string {
     const figureTypeDescription = {
       scientific_diagram: 'a scientific diagram showing processes, concepts, or relationships',
-      scientific_map: 'a scientific map with proper cartographic elements (scale, north arrow, legend)',
+      scientific_map:
+        'a scientific map with proper cartographic elements (scale, north arrow, legend)',
       scientific_chart: 'a scientific chart or data visualization with clear axes and labels',
     }
 
@@ -296,19 +294,43 @@ ABSOLUTE REQUIREMENTS:
 
 REQUEST: "${userPrompt}"
 ${editingInstruction}
-REQUIREMENTS:
-- Clean white or neutral background
-- High contrast, publication-ready colors
-- Clear labels and annotations where needed
-- Professional technical illustration style
+ABSOLUTE REQUIREMENTS (these will be validated by QA):
+- Clean white or neutral background (no gradients, no artistic effects)
+- High contrast, publication-ready colors (dark lines/text on light background)
+- ALL text must be clearly visible, legible, and at a readable size
+- ALL spelling must be correct — scientific credibility depends on it
+- French accent marks must be correct when French text is present (é, è, ê, à, ù, ç, ô, î, û)
 - No decorative or artistic embellishments
 - Suitable for print in academic journals
 
-${features.figureStyle === 'scientific_map' ? `MAP ELEMENTS: Include scale bar, north arrow if relevant, and legend for any symbols or color coding.` : ''}
-${features.figureStyle === 'scientific_chart' ? `CHART ELEMENTS: Include clear axis labels with units, legend if multiple data series, appropriate grid lines.` : ''}
-${features.figureStyle === 'scientific_diagram' ? `DIAGRAM ELEMENTS: Use clear arrows for flow/relationships, label all components, maintain logical spatial organization.` : ''}
+${
+  features.figureStyle === 'scientific_map'
+    ? `MAP-SPECIFIC MANDATORY ELEMENTS (MUST BE PRESENT — QA-CHECKED):
+- Scale bar in bottom-left or bottom-right corner with metric units (m or km)
+- North arrow in top-right corner (standard cartographic symbol)
+- Legend for any symbols, colors, or data layers`
+    : ''
+}
+${
+  features.figureStyle === 'scientific_chart'
+    ? `CHART-SPECIFIC MANDATORY ELEMENTS (MUST BE PRESENT — QA-CHECKED):
+- Both x-axis AND y-axis must have clear labels
+- All axis labels must include SI units in parentheses (e.g., Temperature (°C), Distance (km))
+- Legend when there are multiple data series
+- Grid lines for value reading when appropriate`
+    : ''
+}
+${
+  features.figureStyle === 'scientific_diagram'
+    ? `DIAGRAM-SPECIFIC MANDATORY ELEMENTS (MUST BE PRESENT — QA-CHECKED):
+- All components and elements must be labeled with text annotations
+- Clear arrows showing flow direction and relationships
+- Logical spatial organization
+- Standard scientific symbology`
+    : ''
+}
 
-Transform this request into a precise, technical description that will produce a publication-quality scientific figure.`
+Transform this request into a precise, technical description that will produce a publication-quality scientific figure. Ensure ALL mandatory elements above are explicitly mentioned in your output.`
   }
 
   /**

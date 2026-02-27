@@ -36,6 +36,7 @@ SPELLING & ACCURACY:
 - Double-check ALL text, labels, and annotations for spelling errors
 - Verify scientific terminology is correct
 - Ensure numerical values and units are accurate
+- French accent marks MUST be correct when French text is used (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç)
 
 `
 
@@ -133,7 +134,7 @@ describe('geminiClient', () => {
       expect(result.success).toBe(true)
       if (result.success) {
         expect(result.data.imageData).toBeInstanceOf(Buffer)
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
         expect(result.data.metadata.prompt).toBe('Generate a beautiful landscape')
         expect(result.data.metadata.mimeType).toBe('image/png')
       }
@@ -181,13 +182,13 @@ describe('geminiClient', () => {
       expect(result.success).toBe(true)
       if (result.success) {
         expect(result.data.imageData).toBeInstanceOf(Buffer)
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
         expect(result.data.metadata.prompt).toBe('Enhance this image')
         expect(result.data.metadata.mimeType).toBe('image/jpeg')
       }
 
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -520,14 +521,14 @@ describe('geminiClient', () => {
       expect(result.success).toBe(true)
       if (result.success) {
         expect(result.data.imageData).toBeInstanceOf(Buffer)
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
         // Features are passed to the API but not stored in metadata
         expect(result.data.metadata.prompt).toBe('Generate character with blending')
       }
 
       // Verify API was called with original prompt (no enhancement at GeminiClient level)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -583,12 +584,12 @@ describe('geminiClient', () => {
       if (result.success) {
         // Features are passed to the API but not stored in metadata
         expect(result.data.metadata.prompt).toBe('Generate factually accurate historical scene')
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
       }
 
       // Verify API was called with original prompt (no processing at GeminiClient level)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -643,12 +644,12 @@ describe('geminiClient', () => {
       if (result.success) {
         // Features not specified - standard metadata only
         expect(result.data.metadata.prompt).toBe('Generate simple landscape')
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
       }
 
       // Verify API was called with config
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -710,12 +711,12 @@ describe('geminiClient', () => {
         expect(result.data.metadata.inputImageProvided).toBe(true)
         // Features are passed to the API but not stored in metadata
         expect(result.data.metadata.prompt).toBe('Blend this character with fantasy elements')
-        expect(result.data.metadata.model).toBe('gemini-3-pro-image-preview')
+        expect(result.data.metadata.model).toBe('gemini-3.1-flash-image-preview')
       }
 
       // Verify API was called with input image and original prompt (no processing at GeminiClient level)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -777,7 +778,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -831,7 +832,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -888,7 +889,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -945,7 +946,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -1000,7 +1001,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -1057,7 +1058,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [
@@ -1117,7 +1118,7 @@ describe('geminiClient', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(mockGeminiClientInstance.models.generateContent).toHaveBeenCalledWith({
-        model: 'gemini-3-pro-image-preview',
+        model: 'gemini-3.1-flash-image-preview',
         contents: [
           {
             parts: [

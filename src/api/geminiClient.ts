@@ -185,6 +185,7 @@ SPELLING & ACCURACY:
 - Double-check ALL text, labels, and annotations for spelling errors
 - Verify scientific terminology is correct
 - Ensure numerical values and units are accurate
+- French accent marks MUST be correct when French text is used (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç)
 
 `
 
@@ -198,11 +199,16 @@ const SCIENTIFIC_BASE_INSTRUCTIONS: Record<string, string> = {
 DOMAIN: Geography, Glaciology, Remote Sensing, Geomatics
 PUBLICATION LEVEL: Doctoral thesis, Nature, Science, The Cryosphere, JGR quality
 
-REQUIREMENTS:
-- Clean white or neutral background (no gradients, no artistic effects)
+MANDATORY REQUIREMENTS (WILL BE QA-CHECKED):
+- Clean white or neutral background (no gradients, no artistic effects). CANNOT be omitted.
+- ALL major components and elements MUST be clearly labeled with text annotations. CANNOT be omitted.
+- VISUAL STYLE MUST BE HOMOGENEOUS: do NOT mix flat 2D icons with semi-realistic 3D renderings in the same figure. Pick ONE consistent visual style and apply it throughout. CANNOT be omitted.
+- COLOR PALETTE MUST BE COHERENT: use a unified, purposeful color scheme across the entire diagram (e.g., blues for water/ice, greens for vegetation). No random or clashing colors. CANNOT be omitted.
+- If the figure has MULTIPLE SUB-PANELS or sections, label them with lowercase letters (a), (b), (c), (d) following Nature/Science conventions. CANNOT be omitted.
 - Clear, legible labels and text with professional typography (sans-serif preferred)
 - High contrast colors for readability, colorblind-friendly palette
 - Double-check ALL text for spelling errors - scientific credibility depends on this
+- French accent marks MUST be correct (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç) when French text is present
 - Clear process flows with arrows and labeled components
 - Standard scientific symbology (ISO/cartographic conventions)
 - Vector-like clean lines, consistent line weights
@@ -219,15 +225,16 @@ USER REQUEST: `,
 DOMAIN: Geography, Glaciology, Remote Sensing, Geomatics
 PUBLICATION LEVEL: Doctoral thesis, Nature, Science, The Cryosphere, JGR quality
 
-REQUIREMENTS:
-- Clean white or neutral background
-- MANDATORY: Include scale bar (metric units: m or km)
-- MANDATORY: Include north arrow (standard cartographic symbol)
-- Include legend only if explicitly requested
+MANDATORY REQUIREMENTS (WILL BE QA-CHECKED):
+- Clean white or neutral background. CANNOT be omitted.
+- MANDATORY: You MUST draw a clearly visible scale bar with metric units (m or km) in the bottom-left or bottom-right corner. This element CANNOT be omitted.
+- MANDATORY: You MUST draw a clearly visible north arrow (standard cartographic symbol) in the top-right corner. This element CANNOT be omitted.
+- Include legend if there are color-coded regions, symbols, or multiple data layers
 - MANDATORY: Projection/coordinate system reference if relevant
 - Clear, legible labels with professional typography
 - High contrast colors, colorblind-friendly color schemes
 - Double-check ALL text for spelling errors (place names, labels)
+- French accent marks MUST be correct (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç) when French text is present
 - Clean cartographic style following ISO/ICA standards
 
 EARTH SCIENCE SPECIFICS:
@@ -243,15 +250,17 @@ USER REQUEST: `,
 DOMAIN: Geography, Glaciology, Remote Sensing, Geomatics
 PUBLICATION LEVEL: Doctoral thesis, Nature, Science, The Cryosphere, JGR quality
 
-REQUIREMENTS:
-- Clean white or neutral background (no gradients)
-- MANDATORY: Clear axis labels with SI units (°C, m, km², W/m², etc.)
-- MANDATORY: Legend when multiple data series
+MANDATORY REQUIREMENTS (WILL BE QA-CHECKED):
+- Clean white or neutral background (no gradients). CANNOT be omitted.
+- MANDATORY: BOTH x-axis and y-axis MUST have clearly visible labels. This CANNOT be omitted.
+- MANDATORY: All axis labels MUST include appropriate SI units in parentheses (e.g., Temperature (°C), Distance (km), Area (km²), Flux (W/m²)). Axes without units will FAIL quality check.
+- MANDATORY: If there are multiple data series/lines/bars, you MUST include a legend. CANNOT be omitted.
 - MANDATORY: Error bars or uncertainty indication when showing measured data
 - Grid lines if helpful for reading values
 - Clear, legible text with professional typography (sans-serif)
 - High contrast colors, colorblind-friendly palette
 - Double-check ALL text for spelling errors
+- French accent marks MUST be correct (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç) when French text is present
 
 EARTH SCIENCE SPECIFICS:
 - Time series: proper date formatting on x-axis, temporal resolution indicated
@@ -284,7 +293,7 @@ export interface GeminiClient {
  * Implementation of Gemini API client
  */
 class GeminiClientImpl implements GeminiClient {
-  private readonly modelName = 'gemini-3-pro-image-preview'
+  private readonly modelName = 'gemini-3.1-flash-image-preview'
 
   constructor(private readonly genai: GeminiClientInstance) {}
 
@@ -301,7 +310,10 @@ class GeminiClientImpl implements GeminiClient {
 
       // 2. Add scientific figure instructions if figureStyle is specified
       if (params.figureStyle && SCIENTIFIC_BASE_INSTRUCTIONS[params.figureStyle]) {
-        finalPrompt = BASE_QUALITY_INSTRUCTIONS + SCIENTIFIC_BASE_INSTRUCTIONS[params.figureStyle] + params.prompt
+        finalPrompt =
+          BASE_QUALITY_INSTRUCTIONS +
+          SCIENTIFIC_BASE_INSTRUCTIONS[params.figureStyle] +
+          params.prompt
       }
 
       // 3. Add strict preservation prefix for edit mode (can combine with scientific instructions)
