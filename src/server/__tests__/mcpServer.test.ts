@@ -11,7 +11,7 @@ vi.mock('../../api/geminiClient', () => {
           data: {
             imageData: Buffer.from('mock-image-data', 'utf-8'),
             metadata: {
-              model: 'gemini-3-pro-image-preview-preview',
+              model: 'gemini-3.1-flash-image-preview',
               prompt: 'test prompt',
               mimeType: 'image/png',
               timestamp: new Date(),
@@ -55,7 +55,7 @@ vi.mock('../../business/imageGenerator', () => {
           data: {
             imageData: Buffer.from('mock-image-data', 'utf-8'),
             metadata: {
-              model: 'gemini-3-pro-image-preview-preview',
+              model: 'gemini-3.1-flash-image-preview',
               prompt: 'test prompt',
               mimeType: 'image/png',
               timestamp: new Date(),
@@ -86,7 +86,7 @@ vi.mock('../../business/responseBuilder', () => {
                   mimeType: 'image/png',
                 },
                 metadata: {
-                  model: 'gemini-3-pro-image-preview-preview',
+                  model: 'gemini-3.1-flash-image-preview',
                   prompt: 'test prompt',
                   mimeType: 'image/png',
                   timestamp: new Date().toISOString(),
@@ -240,7 +240,7 @@ describe('MCP Server', () => {
     expect(responseData.resource.name).toBe('test-image.png')
     expect(responseData.resource.mimeType).toBe('image/png')
     expect(responseData).toHaveProperty('metadata')
-    expect(responseData.metadata.model).toBe('gemini-3-pro-image-preview-preview')
+    expect(responseData.metadata.model).toBe('gemini-3.1-flash-image-preview')
   })
 
   it('should save to file when fileName is specified', async () => {
@@ -268,7 +268,7 @@ describe('MCP Server', () => {
     expect(responseData.resource.name).toBe('test-image.png')
     expect(responseData.resource.mimeType).toBe('image/png')
     expect(responseData).toHaveProperty('metadata')
-    expect(responseData.metadata.model).toBe('gemini-3-pro-image-preview-preview')
+    expect(responseData.metadata.model).toBe('gemini-3.1-flash-image-preview')
   })
 
   it('should handle invalid tool request', async () => {
@@ -342,8 +342,12 @@ describe('MCPServer tool schema - aspectRatio', () => {
     const aspectRatioEnum = generateImageTool?.inputSchema.properties?.aspectRatio.enum
 
     // Assert
-    expect(aspectRatioEnum).toHaveLength(10)
+    expect(aspectRatioEnum).toHaveLength(14)
     expect(aspectRatioEnum).toContain('1:1')
+    expect(aspectRatioEnum).toContain('1:4')
+    expect(aspectRatioEnum).toContain('1:8')
+    expect(aspectRatioEnum).toContain('4:1')
+    expect(aspectRatioEnum).toContain('8:1')
     expect(aspectRatioEnum).toContain('16:9')
     expect(aspectRatioEnum).toContain('21:9')
   })
