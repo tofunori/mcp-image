@@ -36,6 +36,7 @@ SPELLING & ACCURACY:
 - Double-check ALL text, labels, and annotations for spelling errors
 - Verify scientific terminology is correct
 - Ensure numerical values and units are accurate
+- French accent marks MUST be correct when French text is used (é, è, ê, ë, à, â, ù, û, ô, î, ï, ç)
 
 `
 

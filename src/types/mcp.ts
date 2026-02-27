@@ -3,6 +3,8 @@
  * Defines types related to @modelcontextprotocol/sdk and project-specific types
  */
 
+import type { QaReport } from './qa'
+
 /**
  * Context method type for image generation metadata
  */
@@ -32,9 +34,9 @@ export type ImageSize = '2K' | '4K'
  * Optimized for environmental sciences, glaciology, and remote sensing
  */
 export type FigureStyle =
-  | 'scientific_diagram'  // Schémas, processus, concepts scientifiques
-  | 'scientific_map'      // Cartes avec éléments standards (échelle, nord, légende)
-  | 'scientific_chart'    // Graphiques, visualisations de données
+  | 'scientific_diagram' // Schémas, processus, concepts scientifiques
+  | 'scientific_map' // Cartes avec éléments standards (échelle, nord, légende)
+  | 'scientific_chart' // Graphiques, visualisations de données
 
 /**
  * Edit mode for image modification
@@ -119,5 +121,9 @@ export interface StructuredContent {
     processingTime: number
     contextMethod: string
     timestamp: string
+    /** QA validation report (only present when figureStyle is set and QA is enabled) */
+    qa?: QaReport | undefined
+    /** Scientific figure style used for generation */
+    figureStyle?: string | undefined
   }
 }
