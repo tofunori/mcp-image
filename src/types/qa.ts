@@ -182,6 +182,27 @@ export const DIAGRAM_CHECKS: QaCheckDefinition[] = [
       'Are all major components and elements in the diagram clearly labeled with text annotations?',
   },
   {
+    id: 'visual_style_consistency',
+    name: 'Visual Style Consistency',
+    severity: 'hard',
+    instruction:
+      'Is the visual style homogeneous throughout the diagram? There should be no mixing of flat 2D and semi-realistic 3D elements, no mixing of icon styles, and no inconsistent rendering approaches within the same figure.',
+  },
+  {
+    id: 'subpanel_labels',
+    name: 'Sub-panel Labels',
+    severity: 'hard',
+    instruction:
+      'If the figure contains multiple sub-panels or sections, are they clearly labeled with lowercase letters (a, b, c, d) or numbers following journal conventions? Single-panel figures pass this check automatically.',
+  },
+  {
+    id: 'color_palette_coherent',
+    name: 'Coherent Color Palette',
+    severity: 'hard',
+    instruction:
+      'Is the color palette coherent and unified across the entire diagram? Colors should follow a consistent scheme (e.g., blues for water/ice, greens for vegetation, reds for heat/danger). Random or clashing colors are a failure.',
+  },
+  {
     id: 'flow_arrows',
     name: 'Flow Arrows',
     severity: 'soft',

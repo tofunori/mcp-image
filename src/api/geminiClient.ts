@@ -202,6 +202,9 @@ PUBLICATION LEVEL: Doctoral thesis, Nature, Science, The Cryosphere, JGR quality
 MANDATORY REQUIREMENTS (WILL BE QA-CHECKED):
 - Clean white or neutral background (no gradients, no artistic effects). CANNOT be omitted.
 - ALL major components and elements MUST be clearly labeled with text annotations. CANNOT be omitted.
+- VISUAL STYLE MUST BE HOMOGENEOUS: do NOT mix flat 2D icons with semi-realistic 3D renderings in the same figure. Pick ONE consistent visual style and apply it throughout. CANNOT be omitted.
+- COLOR PALETTE MUST BE COHERENT: use a unified, purposeful color scheme across the entire diagram (e.g., blues for water/ice, greens for vegetation). No random or clashing colors. CANNOT be omitted.
+- If the figure has MULTIPLE SUB-PANELS or sections, label them with lowercase letters (a), (b), (c), (d) following Nature/Science conventions. CANNOT be omitted.
 - Clear, legible labels and text with professional typography (sans-serif preferred)
 - High contrast colors for readability, colorblind-friendly palette
 - Double-check ALL text for spelling errors - scientific credibility depends on this
